@@ -5,3 +5,5 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <leader>ne :NERDTreeToggle<CR>
 "Allow NERDTree to show hidden files"
 let NERDTreeShowHidden=1
+"Close on open
+"let g:NERDTreeQuitOnOpen=1

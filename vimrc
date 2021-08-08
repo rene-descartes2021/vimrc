@@ -24,12 +24,17 @@ Plug 'preservim/nerdtree'										"file browser
 Plug 'OmniSharp/omnisharp-vim'							"C#.NET language support
 Plug 'nickspoons/vim-sharpenup'
 Plug 'dense-analysis/ale'										"syntax checking
+Plug 'puremourning/vimspector'							"Debugger integration
 Plug 'liuchengxu/vista.vim'									"object browser
+Plug 'ntpeters/vim-better-whitespace'				"whitespace trimmer/viewer
 Plug 'valloric/MatchTagAlways'							"brace match highlighting
 Plug 'jiangmiao/auto-pairs'									"brace auto-pairing
 Plug 'mbbill/undotree'											"view on undo history
 Plug 'gruvbox-community/gruvbox'						"syntax colours
 Plug 'hauleth/asyncdo.vim'									"Async command support
+Plug 'itchyny/lightline.vim'								"Statusline
+Plug 'shinchu/lightline-gruvbox.vim'
+Plug 'maximbaz/lightline-ale'
 
 " Initialize plugin system
 call plug#end()
@@ -39,40 +44,58 @@ nnoremap <leader><CR> :source ~/.vim/vimrc<CR>
 
 " Auto indent your file:
 nnoremap <F7> gg=G<C-o><C-o>
-" Navigate Tabs
+" Navigate Tabs (tmux?)
 nnoremap <C-t><up> :tabr<cr>
 nnoremap <C-t><down> :tabl<cr>
 nnoremap <C-t><left> :tabp<cr>
 nnoremap <C-t><right> :tabn<cr>
+" Navigate windows:
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 nnoremap <Leader>+ :vertical resize +5<CR>
 nnoremap <Leader>- :vertical resize -5<CR>
+" Make Y behave like the rest of the capital letters:
+nnoremap Y y$
+" Keep vim centered when searching, next, previous, join:
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
+" Quick fix centering:
+nnoremap <C-j> :cnext<CR>zzzv
+nnoremap <C-k> :cprev<CR>zzzv
+" Undo will now be broken up by these break points instead of undoing all
+inoremap , ,<c-g>u
+inoremap . .<c-g>u
+inoremap ! !<c-g>u
+inoremap ? ?<c-g>u
+" Relative jumps will now be more intuitive
+nnoremap <expr> k (v:count > 5 ? "m'" . v:count : "") . 'k'
+nnoremap <expr> j (v:count > 5 ? "m'" . v:count : "") . 'j'
+" Moving text, visual block, single lines
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+"inoremap <C-j> <esc>:m .+1<CR>==
+"inoremap <C-k> <esc>:m .-2<CR>==
+nnoremap <leader>j :m .+1<CR>==
+nnoremap <leader>k :m .-2<CR>==
 
-" Support for different goto definitions for different file types:
-augroup OMNISHARP_FILETYPES
-	autocmd!
-	autocmd FileType cs nmap <silent> gd :OmniSharpGotoDefinition<CR>
-	autocmd FileType cs nnoremap <buffer> <Leader>fu :OmniSharpFindUsages<CR>
-	autocmd FileType cs nnoremap <buffer> <Leader>fi :OmniSharpFindImplementations<CR>
-	autocmd FileType cs nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
+" greatest remap ever
+vnoremap <leader>p "_dP
 
-	autocmd FileType ts nmap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
-	autocmd FileType html nmap <silent> gd :call CocActionAsync('jumpDefinition')<CR>
-augroup END
+" next greatest remap ever : asbjornHaland
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>Y gg"+yG
 
-augroup DELETE_TRAILING_WHITESPACE_ON_WRITE
-	autocmd!
-	autocmd BufWritePre * %s/\s\+$//e
-	"autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
-augroup END
-
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
 
 " MUST BE AT THE END OF THIS FILE-->
 " Repo specific .vimrc, useful for project specific settings like
 "  spaces-per-tab, which will take precedence over the user's vimrc
+" I've seen one alternative to getting a repo-specific .vimrc but this works.
 " https://phyks.me/2014/07/specific-vim-config-per-git-repository.html
 let git_path = system("git rev-parse --show-toplevel 2>/dev/null")
 let git_vimrc = substitute(git_path, '\n', '', '') . "/.vimrc"
