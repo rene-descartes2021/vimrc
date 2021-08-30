@@ -35,8 +35,9 @@ Plug 'hauleth/asyncdo.vim'									"Async command support
 Plug 'itchyny/lightline.vim'								"Statusline
 Plug 'shinchu/lightline-gruvbox.vim'
 Plug 'maximbaz/lightline-ale'
+Plug 'tpope/vim-eunuch'											"wrapper for shell commands
 
-" Initialize plugin system
+"Initialize plugin system
 call plug#end()
 
 let mapleader = " "

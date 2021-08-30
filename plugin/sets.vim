@@ -16,3 +16,4 @@ set undofile
 set incsearch
 set scrolloff=8
 set colorcolumn=80
+set viminfo=
